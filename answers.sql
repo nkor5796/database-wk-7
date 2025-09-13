@@ -1,5 +1,7 @@
 USE salesdb;
--- Create ProductDetail table in 1NF
+-- Question 1: Transform ProductDetail into 1NF
+
+-- Create ProductDetail_1NF table
 CREATE TABLE ProductDetail_1NF (
     OrderID INT,
     CustomerName VARCHAR(100),
@@ -7,7 +9,7 @@ CREATE TABLE ProductDetail_1NF (
     PRIMARY KEY (OrderID, Product)
 );
 
--- Insert data into 1NF table
+-- Insert data in 1NF format (atomic values)
 INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product) VALUES
 (101, 'John Doe', 'Laptop'),
 (101, 'John Doe', 'Mouse'),
@@ -16,23 +18,15 @@ INSERT INTO ProductDetail_1NF (OrderID, CustomerName, Product) VALUES
 (102, 'Jane Smith', 'Mouse'),
 (103, 'Emily Clark', 'Phone');
 
--- Disable FK checks to avoid errors while dropping old tables
-SET FOREIGN_KEY_CHECKS = 0;
+-- Question 2: Transform OrderDetails into 2NF
 
--- Drop if they already exist
-DROP TABLE IF EXISTS OrderDetails;
-DROP TABLE IF EXISTS Orders;
-
--- Re-enable FK checks
-SET FOREIGN_KEY_CHECKS = 1;
-
--- Orders table (Customer info)
+-- Create Orders table (removes partial dependency)
 CREATE TABLE Orders (
     OrderID INT PRIMARY KEY,
     CustomerName VARCHAR(100)
 );
 
--- OrderDetails table (Product info linked to Order)
+-- Create OrderDetails table (depends fully on OrderID + Product)
 CREATE TABLE OrderDetails (
     OrderID INT,
     Product VARCHAR(100),
@@ -55,3 +49,4 @@ INSERT INTO OrderDetails (OrderID, Product, Quantity) VALUES
 (102, 'Keyboard', 1),
 (102, 'Mouse', 2),
 (103, 'Phone', 1);
+
